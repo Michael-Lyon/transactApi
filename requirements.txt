@@ -17,3 +17,4 @@ simplejson
 six
 sqlparse
 urllib3
+gunicorn
