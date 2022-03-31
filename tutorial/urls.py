@@ -19,7 +19,7 @@ from rest_framework import routers
 from quickstart import views
 from rest_framework.authtoken import views as v
 from cryptocurrency_payment import urls as cryptocurrency_payment_urls
-# import 
+from django.conf.urls.static import static
 from tutorial.settings import STATIC_ROOT, STATIC_URL
 
 router = routers.DefaultRouter()
