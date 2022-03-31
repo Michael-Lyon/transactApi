@@ -20,6 +20,7 @@ from quickstart import views
 from rest_framework.authtoken import views as v
 from cryptocurrency_payment import urls as cryptocurrency_payment_urls
 # import 
+from tutorial.settings import STATIC_ROOT, STATIC_URL
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -42,4 +43,4 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('api-token-auth/', v.obtain_auth_token),
     re_path(r'^', include(cryptocurrency_payment_urls)),
-]
+] + static(STATIC_URL, document_root=STATIC_ROOT)
