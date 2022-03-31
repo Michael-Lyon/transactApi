@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-7cb)ox6g&&z35io+*p_12@7!v$%4ki%g_f7#z1k(ttb5nd0rtl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["pygod-api.herokuapp.com"]
 
 
 # Application definition
