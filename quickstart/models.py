@@ -60,29 +60,31 @@ class Transactions(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="transactions")
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=20, blank=True, null=True, default="deposit")
+    status = models.CharField(max_length=20, blank=True, null=True, default="Processing")
     amount = models.FloatField(default=0)
     wallest_add = models.CharField(max_length=200, blank=True, null=True)
     sent = models.BooleanField(default=False)
     recieved = models.BooleanField(default=False)
     time = models.DateTimeField(auto_now=True)
-    tid = models.CharField(max_length=50)
+    tid = models.CharField(max_length=250)
+    
 
     def __str__(self):
         return f"{self.user} made {self.type} of {self.amount}"
 
-    def getAllDeposit(self):
+    def get_allDeposit(self):
         # who = kwargs.get('who')
         total = Transactions.objects.filter(user=self.user, type="deposit", recieved=True).aggregate(Sum('amount'))
         return total['amount__sum'] if total['amount__sum'] is not None else 0
 
-    def getAllWithdraws(self):
+    def get_allWithdraws(self):
         # who = kwargs.get('who')
         total = Transactions.objects.filter(user=self.user, type="withdraw", sent=True).aggregate(Sum('amount'))
         return total['amount__sum'] if total['amount__sum'] is not None else 0
 
-    def save(self, *args, **kwargs):
-        self.tid = generate_ref_code()
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.tid = generate_ref_code()
+    #     super().save(*args, **kwargs)
 
 
 class Referral(models.Model):

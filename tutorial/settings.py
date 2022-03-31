@@ -1,3 +1,4 @@
+
 """
 Django settings for tutorial project.
 
@@ -40,6 +41,9 @@ INSTALLED_APPS = [
     'quickstart',
     'corsheaders',
     'rest_framework',
+    "rest_framework.authtoken",
+    'django_filters',
+    'cryptocurrency_payment.apps.CryptocurrencyPaymentConfig',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -130,12 +133,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+
 }
 
 
-CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ORIGIN_WHITELIST = (
-#     'http://localhost:5500',
-#     'http://localhost:8080',
-# )
+CRYPTOCURRENCY_PAYMENT = {
+    "BITCOIN": {
+        "CODE": "btc",
+        "BACKEND": "merchant_wallet.backends.btc.BitcoinBackend",
+        "FEE": 0.00,
+        "REFRESH_PRICE_AFTER_MINUTE": 15,
+        "REUSE_ADDRESS": False,
+        "ACTIVE": True,
+        "MASTER_PUBLIC_KEY": 'xpub6C8RUkUxnLAQtBqGPLAGtHLtUfXm2Qc1eosBpuiydkmj9bbFfEkhBtRjEq8QcxURYiBFDni5f1B4RpuvaVxnVMiRrwAntV1Um8PsxaRteGJ',
+        "CANCEL_UNPAID_PAYMENT_HRS": 24,
+        "CREATE_NEW_UNDERPAID_PAYMENT": True,
+        "IGNORE_UNDERPAYMENT_AMOUNT": 10,
+        "IGNORE_CONFIRMED_BALANCE_WITHOUT_SAVED_HASH_MINS": 20,
+        "BALANCE_CONFIRMATION_NUM": 1,
+        "ALLOW_ANONYMOUS_PAYMENT": True,
+    }
+}
+
+
+# CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:5500',
+    'http://localhost:8080',
+)
+

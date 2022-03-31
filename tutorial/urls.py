@@ -14,17 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework import routers
 from quickstart import views
+from rest_framework.authtoken import views as v
+from cryptocurrency_payment import urls as cryptocurrency_payment_urls
+# import 
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
-router.register(r'profiles', views.ProfileViewSet)
-router.register(r'transactions', views.TransactionsViewSet)
-router.register(r'plans', views.PlanViewSet)
-router.register(r'referral', views.ReferralViewSet)
+# router.register(r'groups', views.GroupViewSet)
+# router.register(r'profiles', views.ProfileViewSet)
+# router.register(r'transactions', views.TransactionsViewSet)
+# router.register(r'plans', views.PlanViewSet)
+# router.register(r'referral', views.ReferralViewSet)
 
 
 # Wire up our API using automatic URL routing.
@@ -32,5 +35,11 @@ router.register(r'referral', views.ReferralViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('transactions/create/', views.transactCreate),
+    path('transactions/', views.transactDetails),
+    path('login/', views.login_user),
+    path('logout/', views.user_logout),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api-token-auth/', v.obtain_auth_token),
+    re_path(r'^', include(cryptocurrency_payment_urls)),
 ]
