@@ -173,9 +173,9 @@ CRYPTOCURRENCY_PAYMENT = {
 }
 
 
-# CORS_ORIGIN_ALLOW_ALL = True
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:5500',
-    'http://localhost:8080',
-)
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:5500',
+#     'http://localhost:8080',
+# )
 
