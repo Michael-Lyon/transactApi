@@ -124,7 +124,8 @@ def login_user(request):
     token = Token.objects.get_or_create(user=Account)[0].key
     print(token)
     if not check_password(password, Account.password):
-        raise ValidationError({"message": "Incorrect Login credentials"})
+        return Response({"message":"Incorrect Login credentials"})
+        # raise ValidationError({"message": "Incorrect Login credentials"})
 
     if Account:
         if Account.is_active:
@@ -138,10 +139,10 @@ def login_user(request):
             return Response(Res)
 
         else:
-            return Response("400", f'Account not active')
+            return Response({"message": 'Account not active'})
 
     else:
-        raise Response("400", f'Account doesnt exist')
+        return Response({"message": 'Account doesnt exist'})
 
 
 
