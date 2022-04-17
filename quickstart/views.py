@@ -138,10 +138,10 @@ def login_user(request):
             return Response(Res)
 
         else:
-            raise ValidationError({"400": f'Account not active'})
+            return Response("400", f'Account not active')
 
     else:
-        raise ValidationError({"400": f'Account doesnt exist'})
+        raise Response("400", f'Account doesnt exist')
 
 
 
