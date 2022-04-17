@@ -35,7 +35,7 @@ router.register(r'users', views.UserViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls)),
+    path('', views.apiOverview),
     path('transactions/create/', views.transactCreate),
     path('transactions/', views.transactDetails),
     path('login/', views.login_user),

@@ -22,6 +22,22 @@ User = get_user_model()
 
 
 @api_view(['GET'])
+def apiOverview(request):
+	api_urls = {
+            'plans': '/plans/',
+            'specific-plan':'/plans/id/'
+          	'all-users': '/users/',
+        	'specific-user': '/user/id/',
+          	'create-user': '/user/posted-info',
+          	'all-transactions': '/transactions/',
+            'search-transactions': '/?user=1&type=deposit&status=Paid/',
+            'create-transaction': '/transactions/create//'
+
+        }
+
+	return Response(api_urls)
+
+@api_view(['GET'])
 def transactDetails(request):
     # for user in User.objects.all():
     #     Token.objects.get_or_create(user=user)
@@ -170,13 +186,14 @@ def login_user(request):
     #         list = get_object_or_404(self.queryset, user=user)
     #         serializer = TransactionsSerializer(list)
     #         return Response(serializer.data)    
-# class PlanViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = Plan.objects.all().order_by('-id')
-#     serializer_class = PlanSerializer
-#     # permission_classes = [permissions.IsAuthenticated]
+
+class PlanViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Plan.objects.all().order_by('-id')
+    serializer_class = PlanSerializer
+    # permission_classes = [permissions.IsAuthenticated]
 
 # class ProfitViewSet(viewsets.ModelViewSet):
 #     """
