@@ -36,8 +36,6 @@ class UserSerializer(serializers.ModelSerializer):
             phone_number=profile_data['phone_number'],
         )
         profile.save()
-        profit = Profile.objects.create(user=user)
-        profit.save()
         return user
 
     def get_days_since_joined(self, obj):
