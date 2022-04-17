@@ -17,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('first_name', 'username', 'last_name', 'password', 'email', 'days_since_joined', 'profile', )
+        fields = ('id','first_name', 'username', 'last_name', 'password', 'email', 'days_since_joined', 'profile', )
 
     def create(self, validated_data):
         # create user
@@ -29,13 +29,13 @@ class UserSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
         )
         user.save()
-        token = Token.objects.get_or_create(user=user)
         profile_data = validated_data.pop('profile')
         profile = Profile.objects.create(
             user=user,
             phone_number=profile_data['phone_number'],
         )
         profile.save()
+        token = Token.objects.get_or_create(user=user)
         return user
 
     def get_days_since_joined(self, obj):
