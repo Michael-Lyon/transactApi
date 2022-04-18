@@ -31,7 +31,7 @@ def apiOverview(request):
           	'create-user': '/user/posted-info',
           	'all-transactions': '/transactions/',
             'search-transactions': '/?user=1&type=deposit&status=Paid/',
-            'create-transaction': '/transactions/create//'
+            'create-transaction': '/transactions/create/'
 
         }
 
