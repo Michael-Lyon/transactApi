@@ -27,8 +27,8 @@ def apiOverview(request):
             'plans': 'links/plans/',
             'specific-plan':'links/plans/id/',
           	'all-users': 'links/users/',
-        	'specific-user': 'links/user/id/',
-          	'create-user': 'links/user/<ur posted data>/',
+        	'specific-user': 'links/users/id/',
+          	'create-user': 'links/users/<ur posted data>/',
           	'all-transactions': '/transactions/',
             'search-transactions': 'transactions/?user=1&type=deposit&status=Paid/',
             'create-transaction': '/transactions/create/<ur posted data>/'
