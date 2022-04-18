@@ -25,13 +25,13 @@ User = get_user_model()
 def apiOverview(request):
 	api_urls = {
             'plans': 'links/plans/',
-            'specific-plan':'/plans/id/',
+            'specific-plan':'links/plans/id/',
           	'all-users': 'links/users/',
         	'specific-user': 'links/user/id/',
-          	'create-user': 'links/user/posted-info',
+          	'create-user': 'links/user/<ur posted data>/',
           	'all-transactions': '/transactions/',
-            'search-transactions': '/?user=1&type=deposit&status=Paid/',
-            'create-transaction': '/transactions/create/'
+            'search-transactions': 'transactions/?user=1&type=deposit&status=Paid/',
+            'create-transaction': '/transactions/create/<ur posted data>/'
 
         }
 
