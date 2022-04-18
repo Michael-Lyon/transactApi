@@ -24,11 +24,11 @@ User = get_user_model()
 @api_view(['GET'])
 def apiOverview(request):
 	api_urls = {
-            'plans': '/plans/',
+            'plans': 'links/plans/',
             'specific-plan':'/plans/id/',
-          	'all-users': '/users/',
-        	'specific-user': '/user/id/',
-          	'create-user': '/user/posted-info',
+          	'all-users': 'links/users/',
+        	'specific-user': 'links/user/id/',
+          	'create-user': 'links/user/posted-info',
           	'all-transactions': '/transactions/',
             'search-transactions': '/?user=1&type=deposit&status=Paid/',
             'create-transaction': '/transactions/create/'
