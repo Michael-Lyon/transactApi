@@ -25,7 +25,7 @@ User = get_user_model()
 def apiOverview(request):
 	api_urls = {
             'plans': '/plans/',
-            'specific-plan':'/plans/id/'
+            'specific-plan':'/plans/id/',
           	'all-users': '/users/',
         	'specific-user': '/user/id/',
           	'create-user': '/user/posted-info',
