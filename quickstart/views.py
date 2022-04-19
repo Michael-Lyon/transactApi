@@ -148,7 +148,7 @@ def login_user(request):
             print(request.user)
             login(request, Account)
             data["message"] = "user logged in"
-            data["user"] = Account
+            data["user"] = Account.id
             data["email_address"] = Account.email
 
             Res = {"data": data, "token": token}
