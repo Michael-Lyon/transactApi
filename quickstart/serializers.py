@@ -34,6 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
         profile = Profile.objects.create(
             user=user,
             phone_number=profile_data['phone_number'],
+            ref_code=profile_data['ref_code']
         )
         profile.save()
         token = Token.objects.get_or_create(user=user)
