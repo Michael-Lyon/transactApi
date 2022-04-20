@@ -90,8 +90,8 @@ def transactCreate(request):
                                  address_index=None,  # Use a particular address index for this payment
                                  reuse_address=None)  # Used previously paid address for this payment
     pid = payment.id
-    print(payment)
-    'crypto_payment_detail'
+    # print(payment)
+    # 'crypto_payment_detail'
     transact = Transactions.objects.create(user=user, plan=plan, amount=amount, status=payment.status, tid=pid)
     transact.save()
 
