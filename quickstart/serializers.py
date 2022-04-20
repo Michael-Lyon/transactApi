@@ -21,15 +21,16 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # create user
-        user = User.objects.create_user(
+        profile_data = validated_data.pop('profile')
+        # user = User
+        user = User(
             first_name=validated_data['first_name'],
             username=validated_data['username'],
             last_name=validated_data['last_name'],
-            password=validated_data['password'],
             email=validated_data['email'],
         )
+        user.set_password(validated_data['password'])
         user.save()
-        profile_data = validated_data.pop('profile')
         profile = Profile.objects.create(
             user=user,
             phone_number=profile_data['phone_number'],
