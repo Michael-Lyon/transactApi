@@ -9,7 +9,7 @@ User = get_user_model()
 
 def generate_ref_code():
     letters = string.ascii_lowercase
-    code= ''.join(random.choice(letters) for i in range(6))
+    code= ''.join(random.choice(letters) for i in range(5))
     return code
 
 

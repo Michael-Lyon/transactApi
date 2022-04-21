@@ -19,26 +19,26 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id','first_name', 'username', 'last_name', 'password', 'email', 'days_since_joined', 'profile', )
 
-    def create(self, validated_data):
-        # create user
-        profile_data = validated_data.pop('profile')
-        # user = User
-        user = User(
-            first_name=validated_data['first_name'],
-            username=validated_data['username'],
-            last_name=validated_data['last_name'],
-            email=validated_data['email'],
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        profile = Profile.objects.create(
-            user=user,
-            phone_number=profile_data['phone_number'],
-            ref_code=profile_data['ref_code']
-        )
-        profile.save()
-        token = Token.objects.get_or_create(user=user)
-        return user
+    # def create(self, validated_data):
+    #     # create user
+    #     profile_data = validated_data.pop('profile')
+    #     # user = User
+    #     user = User(
+    #         first_name=validated_data['first_name'],
+    #         username=validated_data['username'],
+    #         last_name=validated_data['last_name'],
+    #         email=validated_data['email'],
+    #     )
+    #     user.set_password(validated_data['password'])
+    #     user.save()
+    #     profile = Profile.objects.create(
+    #         user=user,
+    #         phone_number=profile_data['phone_number'],
+    #         ref_code=profile_data['ref_code']
+    #     )
+    #     profile.save()
+    #     token = Token.objects.get_or_create(user=user)
+    #     return user
 
     def get_days_since_joined(self, obj):
         print(obj)
@@ -59,7 +59,7 @@ class TransactionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Transactions
-        fields = ['user', 'plan', 'type', 'amount', 'time', 'tid', 'status','wallest_add', 'allDeposit', 'allWithdraw', 'profit']
+        fields = ['id','user', 'plan', 'type', 'amount', 'time', 'tid', 'status','wallest_add', 'allDeposit', 'allWithdraw', 'profit']
 
     def get_allDeposit(self, obj):
         # print(obj)

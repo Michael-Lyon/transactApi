@@ -1,3 +1,4 @@
+from django.core import serializers
 import json
 from django.forms import ValidationError
 from django.urls import reverse
@@ -17,6 +18,8 @@ from rest_framework.authtoken.models import Token
 from cryptocurrency_payment.models import CryptoCurrencyPayment, create_new_payment
 from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
+from django.core.serializers import serialize
+from .myutils import generate_ref_code
 
 User = get_user_model()
 
@@ -59,6 +62,47 @@ def transactDetails(request):
     serializer = TransactionsSerializer(queryset, many=True)
     return Response(serializer.data)
 
+@api_view(["POST"])
+def create_myuser(request):
+    profile_data = request.data.get('profile')
+    first_name = request.data.get('first_name'),
+    username = request.data.get('username'),
+    last_name = request.data.get('last_name'),
+    email = request.data.get('email')
+    # user = User
+    if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
+        data = {"Message":"User already exists"}
+    else: 
+        user = User.objects.create(
+            first_name=request.data.get('first_name'),
+            username=request.data.get('username'),
+            last_name=request.data.get('last_name'),
+            email=request.data.get('email')
+        )
+        user.set_password(request.data.get('password'))
+        user.save()
+        profile = Profile.objects.create(
+            user=user,
+            phone_number=profile_data['phone_number'],
+            ref_code=generate_ref_code()
+        )
+        profile.save()
+        token = Token.objects.get_or_create(user=user)
+        profile = {
+            'ref_code':profile.ref_code,
+            'phone_number':profile.phone_number
+        }
+        data = {'id':user.id, 'first_name':user.first_name, 'last_name':user.last_name, 'password':user.password,
+        'email':user.email, 'profile':profile}
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+    return Response(data)
+    
+        
+    # return use
+
+
 
 @api_view(['POST'])
 def transactCreate(request):
@@ -98,6 +142,7 @@ def transactCreate(request):
     serializer = TransactionsSerializer(data={'user':user_id, 'plan':plan_id, 'amount':amount, 'status':payment.status, 'tid':pid})
     if serializer.is_valid():
         serializer.save()
+
     url = reverse('cryptocurrency_payment:crypto_payment_detail', kwargs={"pk": pid})
     data = serializer.data
     data['url'] = f"http://localhost:8000{url}"

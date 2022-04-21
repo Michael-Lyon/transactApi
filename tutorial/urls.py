@@ -19,6 +19,7 @@ router.register(r'plans', views.PlanViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('links/users/create/', views.create_myuser),
     path('admin/', admin.site.urls),
     path('links/', include(router.urls)),
     path('', views.apiOverview),
