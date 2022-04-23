@@ -180,6 +180,7 @@ def login_user(request):
 
         Account = User.objects.get(email=email1)
     except BaseException as e:
+        return Response({"message": "user doesnt exist"})
         raise ValidationError({"400": f'{str(e)}'})
 
     token = Token.objects.get_or_create(user=Account)[0].key
