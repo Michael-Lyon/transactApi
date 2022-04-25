@@ -18,3 +18,6 @@ six
 sqlparse
 urllib3
 gunicorn
+django-hashid-field
+psycopg2
+django-crontab

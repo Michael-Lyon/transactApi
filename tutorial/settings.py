@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "rest_framework.authtoken",
     'django_filters',
+    'django_crontab',
     'cryptocurrency_payment.apps.CryptocurrencyPaymentConfig',
 ]
 
@@ -82,13 +83,21 @@ WSGI_APPLICATION = 'tutorial.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db_myapi',
+        'USER': 'api',
+        'PASSWORD': 'roots',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -133,6 +142,10 @@ STATICFILES_DIRS = (
     BASE_DIR /'static',
 )
 
+
+HASHID_FIELD_SALT ="1*pjfyurp74dkt(3@4roi  # b@e_@l%!1vhj4xvv*f_jkapjm1!z"
+HASHID_FIELD_ALLOW_INT_LOOKUP = True
+HASHID_FIELD_ENABLE_HASHID_OBJECT = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -180,3 +193,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'http://localhost:8080',
 # )
 
+
+# AUTH_USER_MODEL = 'quickstart.MyUser'
+AUTH_USER_MODEL = 'quickstart.MyUser'
+DEFAULT_AUTO_FIELD = 'hashid_field.HashidAutoField'
+DEFAULT_AUTO_FIELD = 'hashid_field.BigHashidAutoField'

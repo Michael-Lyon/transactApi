@@ -7,21 +7,36 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.db.models.fields import DateTimeField
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 # Create your models here.
+from django.contrib.auth.models import AbstractUser
+from hashid_field import HashidAutoField
 
+class MyUser(AbstractUser):
+    id = HashidAutoField(primary_key=True)
+    
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=15)
     ref_code = models.CharField(max_length=15)
+    recomended_by = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True, blank=True, related_name='ref_by')
     signup_confirmation = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
 
-
-User = get_user_model()
+    def get_recommened_profiles(self):
+        qs = Profile.objects.all()
+        my_recs = []
+        for profile in qs:
+            try:
+                if profile.recomended_by == self.user:
+                    my_recs.append(profile.user.username)
+            except Exception as e:
+                pass
+        return my_recs
+# User = get_user_model()
 
 LABEL_CHOICES = (
     ('one', 'One 1'),
@@ -33,6 +48,7 @@ LABEL_CHOICES = (
 
 
 class Plan(models.Model):
+    id = HashidAutoField(primary_key=True)
     title = models.CharField(max_length=100)
     label = models.CharField(choices=LABEL_CHOICES, max_length=10)
     max_price = models.FloatField(null=True, blank=True)
@@ -57,6 +73,7 @@ class Plan(models.Model):
 
 
 class Transactions(models.Model):
+    id = HashidAutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="transactions")
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=20, blank=True, null=True, default="deposit")
@@ -88,6 +105,7 @@ class Transactions(models.Model):
 
 
 class Referral(models.Model):
+    # id = HashidAutoField(primary_key=True)
     invitee = models.ForeignKey(settings.AUTH_USER_MODEL,
                                 on_delete=models.CASCADE)
     amount = models.FloatField(default=0.0)
@@ -104,7 +122,7 @@ class Profit(models.Model):
 
 
 class Personal_Tweak(models.Model):
-    user = models.ForeignKey(User,  on_delete=models.CASCADE, related_name="geng")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,  on_delete=models.CASCADE, related_name="geng")
     amount = models.FloatField(default=0.0)
 
     def __str__(self):

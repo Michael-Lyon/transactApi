@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from .models import Transactions
+from .models import MyUser, Plan, Profit, Transactions
 # Register your models here.
-# admin.site.register(Plan)
+admin.site.register(Plan)
 # admin.site.register(SelectPlan)
 # admin.site.register(Referral)
-# admin.site.register(Profit)
-# admin.site.register(Personal_Tweak)
+admin.site.register(Profit)
+admin.site.register(MyUser)
+
 
 
 def withdraw_sent(modeladmin, request, queryset):

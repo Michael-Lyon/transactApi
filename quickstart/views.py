@@ -6,10 +6,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from django.shortcuts import get_object_or_404, render
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from quickstart.models import Profile, Transactions, Plan, Profit, Referral
 from rest_framework import viewsets, permissions
-from quickstart.serializers import UserSerializer, GroupSerializer, ProfileSerializer, TransactionsSerializer,PlanSerializer, ProfileSerializer, ReferralSerializer
+from quickstart.serializers import UserSerializer, ProfileSerializer, TransactionsSerializer,PlanSerializer, ProfileSerializer, ReferralSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
@@ -20,9 +20,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
 from django.core.serializers import serialize
 from .myutils import generate_ref_code
-
-User = get_user_model()
-
+from .models import MyUser
+# User = get_user_model()
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -70,38 +69,65 @@ def create_myuser(request):
     last_name = request.data.get('last_name'),
     email = request.data.get('email')
     # user = User
-    if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
+    if MyUser.objects.filter(username=username).exists() or MyUser.objects.filter(email=email).exists():
         data = {"Message":"User already exists"}
     else: 
-        user = User.objects.create(
-            first_name=request.data.get('first_name'),
-            username=request.data.get('username'),
-            last_name=request.data.get('last_name'),
-            email=request.data.get('email')
-        )
-        user.set_password(request.data.get('password'))
-        user.save()
-        profile = Profile.objects.create(
-            user=user,
-            phone_number=profile_data['phone_number'],
-            ref_code=generate_ref_code()
-        )
-        profile.save()
-        token = Token.objects.get_or_create(user=user)
-        profile = {
-            'ref_code':profile.ref_code,
-            'phone_number':profile.phone_number
-        }
-        data = {'id':user.id, 'first_name':user.first_name, 'last_name':user.last_name, 'password':user.password,
-        'email':user.email, 'profile':profile}
-        serializer = UserSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-    return Response(data)
-    
-        
-    # return use
+        try:
+            user = MyUser.objects.create(
+                first_name=request.data.get('first_name'),
+                username=request.data.get('username'),
+                last_name=request.data.get('last_name'),
+                email=request.data.get('email')
+            )
+            user.set_password(request.data.get('password'))
 
+            # Check of a ref code was sent
+            code = profile_data.get('ref_code', None)
+            if code != None:
+                ref_by = Profile.objects.get(ref_code=code).user
+                profile = Profile.objects.create(
+                    user=user,
+                    recomended_by=ref_by,
+                    phone_number=profile_data['phone_number'],
+                    ref_code=generate_ref_code()
+                )
+                profile.save()
+                #CREATE THE USER WITHOUT THE REF CODE
+            else:
+                profile = Profile.objects.create(
+                    user=user,
+                    phone_number=profile_data['phone_number'],
+                    ref_code=generate_ref_code()
+                )
+                profile.save()
+                
+            token = Token.objects.get_or_create(user=user)
+            profile = {
+                'ref_code':profile.ref_code,
+                'phone_number':profile.phone_number
+            }
+
+
+            #REFEREl ND PROFITS PROFITS
+            referred = Referral.objects.create(invitee=user)
+
+            profit = Profit.objects.create(user=user)
+            
+            referred.save()
+            user.save()
+            profit.save()
+
+            data = {'id':user.id.hashid, 'first_name':user.first_name, 'last_name':user.last_name, 'password':user.password,
+            'email':user.email, 'profile':profile}
+            # serializer = UserSerializer(data=data)
+            # if serializer.is_valid():
+            #     serializer.save()
+            return Response(data)
+        except Exception as e:
+            print(e)
+            return Response({'message':'An error occured while saving data'})
+
+        
 
 
 @api_view(['POST'])
@@ -117,7 +143,7 @@ def transactCreate(request):
     user_id = request.data.get('user_id')
     plan_id = request.data.get('plan_id')
 
-    user = User.objects.get(id=user_id)
+    user = MyUser.objects.get(id=user_id)
     plan = Plan.objects.get(id=plan_id)
 
     payment = create_new_payment(crypto='BITCOIN',  # Cryptocurrency from your backend settings
@@ -153,7 +179,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = MyUser.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
 
@@ -178,7 +204,7 @@ def login_user(request):
     password = reqBody['password']
     try:
 
-        Account = User.objects.get(email=email1)
+        Account = MyUser.objects.get(email=email1)
     except BaseException as e:
         return Response({"message": "user doesnt exist"})
         raise ValidationError({"400": f'{str(e)}'})
@@ -210,29 +236,7 @@ def login_user(request):
 
 
 
-# class TransactionsViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = Transactions.objects.all().order_by('-id')
-#     serializer_class = TransactionsSerializer
-#     filter_backends = [DjangoFilterBackend]
-#     filterset_fields = ['type', 'user']
 
-    # permission_classes = [permissions.IsAuthenticated]
-    # @action(detail=True)
-
-    # def list(self, request, user_id=None):
-    #     if user_id is None:
-    #         serializer = TransactionsSerializer(self.queryset, many=True, context={'request': request})
-    #         return Response(serializer.data)
-    #     if user_id:
-    #         print("Heyyyy")
-    #         print(user_id)
-    #         user = User.objects.get(id=user_id)
-    #         list = get_object_or_404(self.queryset, user=user)
-    #         serializer = TransactionsSerializer(list)
-    #         return Response(serializer.data)    
 
 class PlanViewSet(viewsets.ModelViewSet):
     """
@@ -242,36 +246,4 @@ class PlanViewSet(viewsets.ModelViewSet):
     serializer_class = PlanSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
-# class ProfitViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = Profit.objects.all().order_by('-id')
-#     serializer_class = ProfileSerializer
-#     # permission_classes = [permissions.IsAuthenticated]
 
-# class ReferralViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows users to be viewed or edited.
-#     """
-#     queryset = Referral.objects.all().order_by('-id')
-#     serializer_class = ReferralSerializer
-#     # permission_classes = [permissions.IsAuthenticated]
-
-
-# class GroupViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows groups to be viewed or edited.
-#     """
-#     queryset = Group.objects.all()
-#     serializer_class = GroupSerializer
-#     # permission_classes = [permissions.IsAuthenticated]
-
-# class GroupViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint that allows groups to be viewed or edited.
-#     """
-#     queryset = Group.objects.all()
-#     serializer_class = GroupSerializer
-
-    # permission_classes = [permissions.IsAuthenticated]
