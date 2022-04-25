@@ -96,6 +96,7 @@ DATABASES = {
         'NAME': 'db_myapi',
         'USER': 'api',
         'PASSWORD': 'roots',
+        # 'PORT': '5433',
     }
 }
 
