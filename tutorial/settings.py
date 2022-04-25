@@ -198,3 +198,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = 'quickstart.MyUser'
 DEFAULT_AUTO_FIELD = 'hashid_field.HashidAutoField'
 DEFAULT_AUTO_FIELD = 'hashid_field.BigHashidAutoField'
+
+
+CRONJOBS = [
+    ('* */3 * * *', 'quickstart.cron.confirm_deposit', '>> /tmp/confirm_deposit_job.log'), 
+    ('* */5 * * *', 'quickstart.cron.confirm_withdraw', '>> /tmp/confirm_withdraw_job.log'), 
+    ('* */7 * * *', 'quickstart.cron.get_profit', '>> /tmp/get_profit.log'), 
+    ('* */10 * * *', 'quickstart.cron.withdraw_status', '>> /tmp/withdraw_status.log'), 
+    
+    ]
