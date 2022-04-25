@@ -117,7 +117,7 @@ def create_myuser(request):
             user.save()
             profit.save()
 
-            data = {'id':user.id.hashid, 'first_name':user.first_name, 'last_name':user.last_name, 'password':user.password,
+            data = {'id':user.id, 'first_name':user.first_name, 'last_name':user.last_name, 'password':user.password,
             'email':user.email, 'profile':profile}
             # serializer = UserSerializer(data=data)
             # if serializer.is_valid():
