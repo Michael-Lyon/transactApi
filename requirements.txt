@@ -21,3 +21,4 @@ gunicorn
 django-hashid-field
 psycopg2
 django-crontab
+whitenoise

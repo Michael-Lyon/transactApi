@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-
+import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -144,6 +145,8 @@ STATICFILES_DIRS = (
 )
 
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 HASHID_FIELD_SALT ="1*pjfyurp74dkt(3@4roi  # b@e_@l%!1vhj4xvv*f_jkapjm1!z"
 HASHID_FIELD_ALLOW_INT_LOOKUP = True
 HASHID_FIELD_ENABLE_HASHID_OBJECT = False
@@ -199,7 +202,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 AUTH_USER_MODEL = 'quickstart.MyUser'
 DEFAULT_AUTO_FIELD = 'hashid_field.HashidAutoField'
 DEFAULT_AUTO_FIELD = 'hashid_field.BigHashidAutoField'
-
+django_heroku.settings(locals())
 
 CRONJOBS = [
     ('* */3 * * *', 'quickstart.cron.confirm_deposit', '>> /tmp/confirm_deposit_job.log'), 
