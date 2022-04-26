@@ -142,6 +142,7 @@ def transactCreate(request):
     amount = request.data.get('amount')
     user_id = request.data.get('user_id')
     plan_id = request.data.get('plan_id')
+    type = request.data.get('type')
 
     user = MyUser.objects.get(id=user_id)
     plan = Plan.objects.get(id=plan_id)
@@ -244,6 +245,15 @@ class PlanViewSet(viewsets.ModelViewSet):
     """
     queryset = Plan.objects.all().order_by('-id')
     serializer_class = PlanSerializer
+    # permission_classes = [permissions.IsAuthenticated]
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = Profile.objects.all().order_by('-id')
+    serializer_class = ProfileSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
 

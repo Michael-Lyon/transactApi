@@ -22,6 +22,14 @@ class Profile(models.Model):
     ref_code = models.CharField(max_length=15)
     recomended_by = models.ForeignKey(MyUser, on_delete=models.CASCADE, null=True, blank=True, related_name='ref_by')
     signup_confirmation = models.BooleanField(default=False)
+    dob = models.CharField(max_length=300, blank=True, null=True,)
+    permanent_address = models.CharField(max_length=400, null=True, blank=True)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
+    country = models.CharField(max_length=30, null=True, blank=True)
+    present_address = models.CharField(max_length=400, null=True, blank=True)
+    city = models.CharField(max_length=30, null=True, blank=True)
+    wallest_add = models.CharField(max_length=200, null=True, blank=True)
+
 
     def __str__(self):
         return 'Profile for user {}'.format(self.user.username)

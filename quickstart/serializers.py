@@ -12,7 +12,7 @@ User = settings.AUTH_USER_MODEL
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['phone_number', 'ref_code']
+        # fields = ['phone_number', 'ref_code']
         # fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
@@ -93,11 +93,11 @@ class PlanSerializer(serializers.ModelSerializer):
         # fields = ['url', 'username', 'email', 'first_name', 'last_name', 'groups']
         fields = '__all__'
     
-    def get_id(self, obj):
-        # print(obj.my_id)
-        id = obj.id
-        # print(h)
-        return id.hashid
+    # def get_id(self, obj):
+    #     # print(obj.my_id)
+    #     id = obj.id
+    #     # print(h)
+    #     return id.hashid
 
 class ProfitSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,9 +105,9 @@ class ProfitSerializer(serializers.ModelSerializer):
         # fields = ['url', 'username', 'email', 'first_name', 'last_name', 'groups']
         fields = '__all__'
     
-    def get_id(self, obj):
-        id = obj.id
-        return id.hashid
+    # def get_id(self, obj):
+    #     id = obj.id
+    #     return id.hashid
 
 class ReferralSerializer(serializers.ModelSerializer):
     class Meta:
