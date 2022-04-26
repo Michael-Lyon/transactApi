@@ -13,7 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         # fields = ['phone_number', 'ref_code']
-        # fields = '__all__'
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.SerializerMethodField()
