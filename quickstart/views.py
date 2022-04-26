@@ -254,6 +254,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     queryset = Profile.objects.all().order_by('-id')
     serializer_class = ProfileSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user',]
     # permission_classes = [permissions.IsAuthenticated]
 
 

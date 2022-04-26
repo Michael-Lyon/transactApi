@@ -53,6 +53,7 @@ class TransactionsSerializer(serializers.ModelSerializer):
     profit = serializers.SerializerMethodField()
     withdraw_status = serializers.SerializerMethodField()
     id = serializers.SerializerMethodField()
+    
 
     # user = serializers.PrimaryKeyRelatedField(
     #     pk_field=HashidSerializerCharField(source_field='quickstart.MyUser.id'),
