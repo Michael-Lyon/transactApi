@@ -9,11 +9,8 @@ from tutorial.settings import STATIC_ROOT, STATIC_URL
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
-# router.register(r'groups', views.GroupViewSet)
 router.register(r'profiles', views.ProfileViewSet)
-# router.register(r'transactions', views.TransactionsViewSet)
 router.register(r'plans', views.PlanViewSet)
-# router.register(r'referral', views.ReferralViewSet)
 
 
 # Wire up our API using automatic URL routing.

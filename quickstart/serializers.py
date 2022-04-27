@@ -53,7 +53,7 @@ class TransactionsSerializer(serializers.ModelSerializer):
     profit = serializers.SerializerMethodField()
     withdraw_status = serializers.SerializerMethodField()
     id = serializers.SerializerMethodField()
-    
+
 
     # user = serializers.PrimaryKeyRelatedField(
     #     pk_field=HashidSerializerCharField(source_field='quickstart.MyUser.id'),
@@ -89,16 +89,15 @@ class TransactionsSerializer(serializers.ModelSerializer):
         return id
 
 class PlanSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
     class Meta:
         model = Plan
-        # fields = ['url', 'username', 'email', 'first_name', 'last_name', 'groups']
-        fields = '__all__'
+        fields = ['id', 'title', 'max_price', 'min_price', 'rate', 'description1']
+        # fields = '__all__'
     
-    # def get_id(self, obj):
-    #     # print(obj.my_id)
-    #     id = obj.id
-    #     # print(h)
-    #     return id.hashid
+    def get_id(self, obj):
+        id = obj.id
+        return id
 
 class ProfitSerializer(serializers.ModelSerializer):
     class Meta:
