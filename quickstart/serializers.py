@@ -68,10 +68,10 @@ class TransactionsSerializer(serializers.ModelSerializer):
         return obj.get_allDeposit()
 
     def get_profit(self, obj):
-        return obj.user.userprofit.amount if Profit.objects.filter(user=obj.user).exists() else 0
+        return obj.user.userprofit.get().amount if Profit.objects.filter(user=obj.user).exists() else 0
     
     def get_withdraw_status(self, obj):
-        return obj.user.userprofit.can_withdraw if Profit.objects.filter(user=obj.user).exists() else 0
+        return obj.user.userprofit.get().can_withdraw if Profit.objects.filter(user=obj.user).exists() else 0
     
     
     def get_allWithdraw(self, obj):
