@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import Group
 from quickstart.models import Profile, Transactions, Plan, Profit, Referral
 from rest_framework import viewsets, permissions
-from quickstart.serializers import UserSerializer, ProfileSerializer, TransactionsSerializer,PlanSerializer, ProfileSerializer, ReferralSerializer
+from quickstart.serializers import UserSerializer, ProfileSerializer, TransactionsSerializer, PlanSerializer, ProfileSerializer, ReferralSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
@@ -23,21 +23,22 @@ from .myutils import generate_ref_code
 from .models import MyUser
 # User = get_user_model()
 
+
 @api_view(['GET'])
 def apiOverview(request):
-	api_urls = {
-            'plans': 'links/plans/',
-            'specific-plan':'links/plans/id/',
-          	'all-users': 'links/users/',
-        	'specific-user': 'links/users/id/',
-          	'create-user': 'links/users/<ur posted data>/',
-          	'all-transactions': '/transactions/',
-            'search-transactions': 'transactions/?user=1&type=deposit&status=Paid/',
-            'create-transaction': '/transactions/create/<ur posted data>/'
+    api_urls = {
+        'plans': 'links/plans/',
+        'specific-plan': 'links/plans/id/',
+        'all-users': 'links/users/',
+        'specific-user': 'links/users/id/',
+        'create-user': 'links/users/<ur posted data>/',
+        'all-transactions': '/transactions/',
+        'search-transactions': 'transactions/?user=1&type=deposit&status=Paid/',
+        'create-transaction': '/transactions/create/<ur posted data>/'
+    }
 
-        }
+    return Response(api_urls)
 
-	return Response(api_urls)
 
 @api_view(['GET'])
 def transactDetails(request):
@@ -61,6 +62,7 @@ def transactDetails(request):
     serializer = TransactionsSerializer(queryset, many=True)
     return Response(serializer.data)
 
+
 @api_view(["POST"])
 def create_myuser(request):
     profile_data = request.data.get('profile')
@@ -70,8 +72,8 @@ def create_myuser(request):
     email = request.data.get('email')
     # user = User
     if MyUser.objects.filter(username=username).exists() or MyUser.objects.filter(email=email).exists():
-        data = {"Message":"User already exists"}
-    else: 
+        data = {"Message": "User already exists"}
+    else:
         try:
             user = MyUser.objects.create(
                 first_name=request.data.get('first_name'),
@@ -92,7 +94,7 @@ def create_myuser(request):
                     ref_code=generate_ref_code()
                 )
                 profile.save()
-                #CREATE THE USER WITHOUT THE REF CODE
+                # CREATE THE USER WITHOUT THE REF CODE
             else:
                 profile = Profile.objects.create(
                     user=user,
@@ -100,34 +102,31 @@ def create_myuser(request):
                     ref_code=generate_ref_code()
                 )
                 profile.save()
-                
+
             token = Token.objects.get_or_create(user=user)
             profile = {
-                'ref_code':profile.ref_code,
-                'phone_number':profile.phone_number
+                'ref_code': profile.ref_code,
+                'phone_number': profile.phone_number
             }
 
-
-            #REFEREl ND PROFITS PROFITS
+            # REFEREl ND PROFITS PROFITS
             referred = Referral.objects.create(invitee=user)
 
             profit = Profit.objects.create(user=user)
-            
+
             referred.save()
             user.save()
             profit.save()
 
-            data = {'id':user.id, 'first_name':user.first_name, 'last_name':user.last_name, 'password':user.password,
-            'email':user.email, 'profile':profile}
+            data = {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'password': user.password,
+                    'email': user.email, 'profile': profile}
             # serializer = UserSerializer(data=data)
             # if serializer.is_valid():
             #     serializer.save()
             return Response(data)
         except Exception as e:
             print(e)
-            return Response({'message':'An error occured while saving data'})
-
-        
+            return Response({'message': 'An error occured while saving data'})
 
 
 @api_view(['POST'])
@@ -163,10 +162,11 @@ def transactCreate(request):
     pid = payment.id
     # print(payment)
     # 'crypto_payment_detail'
-    transact = Transactions.objects.create(user=user, plan=plan, amount=amount, status=payment.status, tid=pid)
+    transact = Transactions.objects.create(user=user, plan=plan, amount=amount, status=payment.status, tid=pid, type=type)
     transact.save()
 
-    serializer = TransactionsSerializer(data={'user':user_id, 'plan':plan_id, 'amount':amount, 'status':payment.status, 'tid':pid})
+    serializer = TransactionsSerializer(data={'user': user_id, 'plan': plan_id,
+                                        'amount': amount, 'status': payment.status, 'tid': pid})
     if serializer.is_valid():
         serializer.save()
 
@@ -194,13 +194,14 @@ def user_logout(request):
 
     return Response('User Logged out successfully')
 
+
 @api_view(["POST"])
 def login_user(request):
 
     data = {}
     reqBody = json.loads(request.body)
     email1 = reqBody['Email_Address']
-     
+
     print(email1)
     password = reqBody['password']
     try:
@@ -213,7 +214,7 @@ def login_user(request):
     token = Token.objects.get_or_create(user=Account)[0].key
     print(token)
     if not check_password(password, Account.password):
-        return Response({"message":"Incorrect Login credentials"})
+        return Response({"message": "Incorrect Login credentials"})
         # raise ValidationError({"message": "Incorrect Login credentials"})
 
     if Account:
@@ -235,10 +236,6 @@ def login_user(request):
         return Response({"message": 'Account doesnt exist'})
 
 
-
-
-
-
 class PlanViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -255,7 +252,5 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all().order_by('-id')
     serializer_class = ProfileSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['user',]
+    filterset_fields = ['user', ]
     # permission_classes = [permissions.IsAuthenticated]
-
-

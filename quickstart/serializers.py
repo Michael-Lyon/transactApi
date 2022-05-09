@@ -120,3 +120,60 @@ class ReferralSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Group
 #         fields = ['url', 'name']
+
+# {
+#     "id": "71q6wRe",
+#     "title": "Agency Plan",
+#     "max_price": None,
+#     "min_price": 10000.0,
+#     "rate": 17.0,
+#     "description1": "Agency Plan"
+# },
+# {
+#     "id": "EaRpXRK",
+#     "title": "Assembled Plan",
+#     "max_price": 4999.0,
+#     "min_price": 3000.0,
+#     "rate": 19.0,
+#     "description1": "Assembled"
+# },
+# {
+#     "id": "lpnO3ny",
+#     "title": "Promo Plan",
+#     "max_price": 5000.0,
+#     "min_price": 3000.0,
+#     "rate": 12.0,
+#     "description1": "Promo"
+# },
+# {
+#     "id": "l8qM0nL",
+#     "title": "Administative Plan",
+#     "max_price": 9999.0,
+#     "min_price": 4000.0,
+#     "rate": 19.0,
+#     "description1": "Administrative"
+# },
+# {
+#     "id": "lpqvmnb",
+#     "title": "Diamond Plan",
+#     "max_price": 3999.0,
+#     "min_price": 1000.0,
+#     "rate": 10.0,
+#     "description1": "Diamond Plan"
+# },
+# {
+#     "id": "73Z9yZp",
+#     "title": "Beginner's Plan",
+#     "max_price": 999.0,
+#     "min_price": 50.0,
+#     "rate": 17.0,
+#     "description1": "A simple plan"
+# },
+# {
+#     "id": "5JnK0qB",
+#     "title": "Demo Plan",
+#     "max_price": 300000.0,
+#     "min_price": 200.0,
+#     "rate": 12.0,
+#     "description1": "Just a demo"
+# }
